@@ -1,50 +1,109 @@
 const mongoose = require("mongoose");
 
+const imageSchema = new mongoose.Schema(
+    {
+        url: String,
+        publicId: String
+    },
+    { _id: false }
+);
+
 const partnerProfileSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true
+            required: true,
+            unique: true
         },
 
-        fullName: String,
+        fullName: {
+            type: String,
+            default: ""
+        },
 
-        gender: String,
+        gender: {
+            type: String,
+            enum: ["male", "female", "other"],
+            default: null
+        },
 
-        dob: Date,
+        dob: {
+            type: Date,
+            default: null
+        },
 
-        email: String,
+        email: {
+            type: String,
+            default: "",
+            lowercase: true
+        },
 
-        profileImage: String,
+        profileImage: imageSchema,
 
-        experience: Number,
+        experience: {
+            type: Number,
+            default: 0
+        },
 
-        languages: [String],
+        languages: {
+            type: [String],
+            default: []
+        },
 
-        specialization: [String],
+        specialization: {
+            type: [String],
+            default: []
+        },
 
-        bio: String,
+        bio: {
+            type: String,
+            default: ""
+        },
 
-        priceChat: Number,
+        priceChat: {
+            type: Number,
+            default: 0
+        },
 
-        priceCall: Number,
+        priceCall: {
+            type: Number,
+            default: 0
+        },
 
-        priceVideo: Number,
+        priceVideo: {
+            type: Number,
+            default: 0
+        },
 
-        governmentId: String,
+        governmentId: imageSchema,
 
-        certificate: String,
+        certificate: imageSchema,
 
-        bankName: String,
+        bankName: {
+            type: String,
+            default: ""
+        },
 
-        accountNumber: String,
+        accountNumber: {
+            type: String,
+            default: ""
+        },
 
-        ifsc: String,
+        ifsc: {
+            type: String,
+            default: ""
+        },
 
-        upiId: String,
+        upiId: {
+            type: String,
+            default: ""
+        },
 
-        address: String,
+        address: {
+            type: String,
+            default: ""
+        },
 
         approvalStatus: {
             type: String,
@@ -60,6 +119,16 @@ const partnerProfileSchema = new mongoose.Schema(
         totalReviews: {
             type: Number,
             default: 0
+        },
+
+        isOnline: {
+            type: Boolean,
+            default: false
+        },
+
+        isBusy: {
+            type: Boolean,
+            default: false
         }
     },
     {

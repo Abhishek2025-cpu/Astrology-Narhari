@@ -1,29 +1,54 @@
 const mongoose = require("mongoose");
 
+const imageSchema = new mongoose.Schema(
+    {
+        url: String,
+        publicId: String,
+    },
+    { _id: false }
+);
+
 const userProfileSchema = new mongoose.Schema(
     {
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true
+            required: true,
+            unique: true
         },
 
-        fullName: String,
+        fullName: {
+            type: String,
+            default: ""
+        },
 
         gender: {
             type: String,
-            enum: ["male", "female", "other"]
+            enum: ["male", "female", "other"],
+            default: null
         },
 
-        dob: Date,
+        dob: {
+            type: Date,
+            default: null
+        },
 
-        birthTime: String,
+        birthTime: {
+            type: String,
+            default: ""
+        },
 
-        birthPlace: String,
+        birthPlace: {
+            type: String,
+            default: ""
+        },
 
-        profileImage: String,
+        profileImage: imageSchema,
 
-        referralCode: String
+        referralCode: {
+            type: String,
+            default: ""
+        }
     },
     {
         timestamps: true
