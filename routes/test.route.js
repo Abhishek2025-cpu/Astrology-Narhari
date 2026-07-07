@@ -4,88 +4,122 @@ const Product = require("../models/Product");
 
 router.get("/products", async (req, res) => {
     try {
-        const products = await Product.find().lean();
+        const products = await Product.find()
+            .populate("category")
+            .lean();
 
-        let html = "";
+        const html = products.map(product => `
+<section class="astro-product" data-id="${product._id}">
 
-        products.forEach((product) => {
-            html += `
-            <article class="astro-product" data-id="${product._id}">
-                
-                <div class="product-image">
-                    <img
-                        src="${product.thumbnail}"
-                        alt="${product.name}"
-                        loading="lazy"
-                    />
-                </div>
+    <div class="product-gallery">
+        <img
+            src="${product.thumbnail || "https://placehold.co/800x500?text=Astrology+Product"}"
+            alt="${product.name}"
+            loading="lazy"
+        />
+    </div>
 
-                <div class="product-content">
+    <div class="product-details">
 
-                    <h2 class="product-title">
-                        ${product.name}
-                    </h2>
+        <span class="badge">
+            ⭐ Bestseller
+        </span>
 
-                    <div class="product-category">
-                        ${product.category?.name || ""}
-                    </div>
+        <h1>${product.name}</h1>
 
-                    <div class="price-section">
-                        <span class="selling-price">
-                            ₹${product.discountPrice || product.price}
-                        </span>
+        <p class="category">
+            ${product.category?.name || "Astrology Service"}
+        </p>
 
-                        ${
-                            product.discountPrice
-                                ? `<span class="original-price">₹${product.price}</span>`
-                                : ""
-                        }
-                    </div>
+        <div class="price-box">
 
-                    <div class="product-description">
-                        ${product.shortDescription || ""}
-                    </div>
+            <span class="price">
+                ₹${product.discountPrice || product.price}
+            </span>
 
-                    <div class="astro-benefits">
-                        <h4>What You'll Get</h4>
+            ${
+                product.discountPrice
+                    ? `<span class="mrp">₹${product.price}</span>`
+                    : ""
+            }
 
-                        <ul>
-                            <li>✔ Detailed Horoscope Reading</li>
-                            <li>✔ Planetary Position Analysis</li>
-                            <li>✔ Career & Finance Predictions</li>
-                            <li>✔ Love & Marriage Insights</li>
-                            <li>✔ Health Guidance</li>
-                            <li>✔ Personalized Remedies</li>
-                        </ul>
-                    </div>
+        </div>
 
-                    <div class="product-footer">
+        <div class="description">
+            ${product.description || product.shortDescription || ""}
+        </div>
 
-                        <span class="delivery">
-                            📄 PDF Report within 24 Hours
-                        </span>
+        <h3>Highlights</h3>
 
-                        <button
-                            class="buy-now"
-                            data-product-id="${product._id}"
-                        >
-                            Purchase Report
-                        </button>
+        <ul>
 
-                    </div>
+            <li>✨ 100% Personalized Report</li>
 
-                </div>
+            <li>🔮 Prepared by Experienced Astrologers</li>
 
-            </article>
-            `;
-        });
+            <li>📄 PDF Delivered within 24 Hours</li>
 
-        res.type("text/html");
+            <li>🪐 Based on Vedic Astrology</li>
+
+            <li>📱 Mobile Friendly Report</li>
+
+            <li>💬 Lifetime Support</li>
+
+        </ul>
+
+        <h3>Benefits</h3>
+
+        <p>
+            This report helps you understand your career, marriage,
+            relationships, finances, health, lucky periods,
+            planetary strengths and personalized remedies.
+        </p>
+
+        <table>
+
+            <tr>
+                <td>Delivery</td>
+                <td>24 Hours</td>
+            </tr>
+
+            <tr>
+                <td>Language</td>
+                <td>English / Hindi</td>
+            </tr>
+
+            <tr>
+                <td>Format</td>
+                <td>PDF</td>
+            </tr>
+
+            <tr>
+                <td>Support</td>
+                <td>Lifetime</td>
+            </tr>
+
+        </table>
+
+        <div class="cta">
+
+            <button
+                class="buy-now"
+                data-product="${product._id}">
+                Buy Now
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+        `).join("");
+
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
         res.send(html);
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("<div>Something went wrong.</div>");
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("<p>Something went wrong.</p>");
     }
 });
 
