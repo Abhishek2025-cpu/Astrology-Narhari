@@ -1,5 +1,6 @@
 require("dotenv").config();
-
+const dns = require("node:dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -29,13 +30,16 @@ app.get("/", (req, res) => {
 });
 
 // Routes
-// app.use("/api/auth", require("./routes/auth.routes"));
-const authRoutes = require("./routes/auth.routes");
-
-app.use("/api/auth", authRoutes);
-
-const userRoutes = require("./routes/user.routes");
-app.use("/api/user", userRoutes);
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/user", require("./routes/user.routes"));
+app.use("/api/partner", require("./routes/partner.routes"));
+app.use("/api/banners", require("./routes/banner.routes"));
+app.use("/api/astrologers", require("./routes/astrologer.routes"));
+app.use("/api/horoscope", require("./routes/horoscope.routes"));
+app.use("/api/kundli", require("./routes/kundli.routes"));
+app.use("/api/wallet", require("./routes/wallet.routes"));
+app.use("/api/notifications", require("./routes/notification.routes"));
+app.use("/api/shop/products", require("./routes/product.routes"));
 
 const TestRoutes = require("./routes/test.route");
 app.use("/api/dummy", TestRoutes);

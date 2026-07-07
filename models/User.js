@@ -54,6 +54,11 @@ const userSchema = new mongoose.Schema(
             default: "android"
         },
 
+        walletAmount: {
+            type: Number,
+            default: 0
+        },
+
         refreshToken: String,
 
         lastLogin: Date

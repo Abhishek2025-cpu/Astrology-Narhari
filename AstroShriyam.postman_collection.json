@@ -1,0 +1,687 @@
+{
+	"info": {
+		"_postman_id": "8c45d315-7798-444f-a42e-cf61ff2b56ad",
+		"name": "AstroShriyam API Collection",
+		"description": "API requests for the AstroShriyam backend application. Points to local backend at http://localhost:5000 by default. Set the variable `token` after calling `/verify-otp` to authenticate requests.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Send OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mobile\": \"9999999999\",\n    \"countryCode\": \"+91\",\n    \"role\": \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/send-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"send-otp"
+							]
+						},
+						"description": "Sends a hardcoded OTP (123456) to the user's mobile number. Registers the user if they do not exist."
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mobile\": \"9999999999\",\n    \"otp\": \"123456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verify-otp",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verify-otp"
+							]
+						},
+						"description": "Verifies the hardcoded OTP (123456) and returns the JWT authorization token. Save the token as a variable `token` for authenticated endpoints."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Profile",
+			"item": [
+				{
+					"name": "User Onboarding",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Mystic Traveler\",\n    \"gender\": \"female\",\n    \"dob\": \"1995-08-15\",\n    \"birthTime\": \"14:30\",\n    \"birthPlace\": \"Mumbai, IN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/onboarding",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"onboarding"
+							]
+						},
+						"description": "Submits user onboarding details. Requires User Bearer Token."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/user/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						},
+						"description": "Retrieves the current logged in user's profile details."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Mystic Traveler Edited\",\n    \"gender\": \"female\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/user/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"profile"
+							]
+						},
+						"description": "Updates profile details for the logged-in user."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Partner (Astrologer) Profile",
+			"item": [
+				{
+					"name": "Partner Onboarding",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Pandit Sharma\",\n    \"gender\": \"male\",\n    \"dob\": \"1975-04-12\",\n    \"email\": \"sharma@astro.com\",\n    \"experience\": 15,\n    \"languages\": \"[\\\"Hindi\\\", \\\"Sanskrit\\\"]\",\n    \"specialization\": \"[\\\"Vedic\\\", \\\"Marriage\\\", \\\"Kundli\\\"]\",\n    \"bio\": \"Experienced Vedic astrologer specialized in marriage matchmaking.\",\n    \"priceChat\": 25,\n    \"priceCall\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/partner/onboarding",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"partner",
+								"onboarding"
+							]
+						},
+						"description": "Registers an astrologer's professional profile. Can accept government ID, profile image, and certificate files as multipart data."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Partner Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/partner/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"partner",
+								"profile"
+							]
+						},
+						"description": "Gets current logged in partner profile."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banners",
+			"item": [
+				{
+					"name": "Get Banners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/banners",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"banners"
+							]
+						},
+						"description": "Retrieves the list of all active home page banners."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Astrologers List",
+			"item": [
+				{
+					"name": "Get All Astrologers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/astrologers",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"astrologers"
+							]
+						},
+						"description": "Retrieves all approved astrologers."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Live Astrologers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/astrologers/live",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"astrologers",
+								"live"
+							]
+						},
+						"description": "Retrieves approved astrologers who are currently online and not busy."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Top Astrologers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/astrologers/top",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"astrologers",
+								"top"
+							]
+						},
+						"description": "Retrieves top-rated approved astrologers sorted by rating."
+					},
+					"response": []
+				},
+				{
+					"name": "Search Astrologers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/astrologers/search?query=Vedic",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"astrologers",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "Vedic"
+								}
+							]
+						},
+						"description": "Searches approved astrologers by name, specialization, or language match."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Daily Horoscope",
+			"item": [
+				{
+					"name": "Get Horoscope by Sign",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/horoscope/leo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"horoscope",
+								"leo"
+							]
+						},
+						"description": "Retrieves the horoscope prediction details, luck scores, lucky number, and color for a specific zodiac sign (e.g. Leo)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Kundli & Matching",
+			"item": [
+				{
+					"name": "Get My Kundli",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/kundli/my-kundli",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kundli",
+								"my-kundli"
+							]
+						},
+						"description": "Retrieves the logged-in user's previously generated birth chart / Kundli."
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Kundli",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"Mystic Traveler\",\n    \"gender\": \"female\",\n    \"dob\": \"1995-08-15\",\n    \"birthTime\": \"14:30\",\n    \"birthPlace\": \"Mumbai, IN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/kundli/generate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kundli",
+								"generate"
+							]
+						},
+						"description": "Generates and saves a new birth chart (Kundli)."
+					},
+					"response": []
+				},
+				{
+					"name": "Check Matchmaking Compatibility",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"maleName\": \"Amit Kumar\",\n    \"maleDob\": \"1994-06-20\",\n    \"maleTob\": \"10:15\",\n    \"malePob\": \"Delhi, IN\",\n    \"femaleName\": \"Pooja Patel\",\n    \"femaleDob\": \"1995-09-12\",\n    \"femaleTob\": \"18:40\",\n    \"femalePob\": \"Ahmedabad, IN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/kundli/match",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"kundli",
+								"match"
+							]
+						},
+						"description": "Performs Kundli matchmaking compatibility checks and returns points (gunas matched out of 36)."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Get Wallet Balance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/wallet/balance",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"wallet",
+								"balance"
+							]
+						},
+						"description": "Retrieves the current wallet balance of the logged in user."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Wallet Transactions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/wallet/transactions",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"wallet",
+								"transactions"
+							]
+						},
+						"description": "Retrieves the user's transaction history logs."
+					},
+					"response": []
+				},
+				{
+					"name": "Recharge Wallet",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 500\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/wallet/recharge",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"wallet",
+								"recharge"
+							]
+						},
+						"description": "Credits a specified amount to the user's wallet and logs a credit transaction."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/notifications",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"notifications"
+							]
+						},
+						"description": "Retrieves notifications targetting the user as well as global alerts."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cosmic Shop Products",
+			"item": [
+				{
+					"name": "Get Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/shop/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"shop",
+								"products"
+							]
+						},
+						"description": "Fetches products listed in the shop."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "YOUR_JWT_TOKEN",
+			"type": "string"
+		}
+	]
+}
