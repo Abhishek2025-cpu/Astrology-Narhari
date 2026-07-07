@@ -1,4 +1,8 @@
-router.get("/products/all", async (req, res) => {
+const express = require("express");
+const router = express.Router();
+const Product = require("../models/Product");
+
+router.get("/products/html", async (req, res) => {
     try {
         const products = await Product.find().lean();
 
@@ -90,3 +94,5 @@ router.get("/products/all", async (req, res) => {
         res.status(500).send("<h1>Internal Server Error</h1>");
     }
 });
+
+module.exports = router;
