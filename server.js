@@ -40,6 +40,7 @@ app.use("/api/kundli", require("./routes/kundli.routes"));
 app.use("/api/wallet", require("./routes/wallet.routes"));
 app.use("/api/notifications", require("./routes/notification.routes"));
 app.use("/api/shop/products", require("./routes/product.routes"));
+app.use("/api/admin", require("./routes/admin.routes"));
 
 const TestRoutes = require("./routes/test.route");
 app.use("/api/dummy", TestRoutes);
