@@ -11,6 +11,7 @@ const {
 
     /* Admin Auth */
     adminLogin,
+    adminRegister,
 
     /* Admin Profile */
     getAdminProfile,
@@ -64,6 +65,9 @@ const {
 /* ─────────────────────────────────────────────────────────────
    PUBLIC ROUTES (No auth required)
 ───────────────────────────────────────────────────────────── */
+
+// POST /api/admin/register  (protected by ADMIN_REGISTER_SECRET)
+router.post("/register", adminRegister);
 
 // POST /api/admin/login
 router.post("/login", adminLogin);

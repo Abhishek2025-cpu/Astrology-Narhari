@@ -983,6 +983,105 @@ exports.updateSubadminPermissions = async (req, res) => {
 };
 
 /* ─────────────────────────────────────────────────────────────
+   ADMIN REGISTER (Super Admin self-registration)
+───────────────────────────────────────────────────────────── */
+
+/**
+ * POST /api/admin/register
+ * Register the very first super admin account.
+ * Body: { mobile, fullName, email, password, secretKey }
+ *
+ * secretKey must match the ADMIN_REGISTER_SECRET env variable.
+ * This prevents unauthorized admin account creation.
+ */
+
+
+exports.adminRegister = async (req, res) => {
+    try {
+        const { mobile, fullName, email, password,role } = req.body;
+
+        // Validation
+        if (!mobile || !password || !fullName || !email) {
+            return errorResponse(
+                res,
+                "Mobile, fullName, email and password are required",
+                400
+            );
+        }
+
+        if (password.length < 6) {
+            return errorResponse(
+                res,
+                "Password must be at least 6 characters",
+                400
+            );
+        }
+
+        // Check existing mobile
+        const existingMobile = await User.findOne({ mobile });
+        if (existingMobile) {
+            return errorResponse(res, "Mobile number already registered", 409);
+        }
+
+        // Check existing email
+        const existingEmail = await AdminProfile.findOne({
+            email: email.toLowerCase()
+        });
+
+        if (existingEmail) {
+            return errorResponse(res, "Email already registered", 409);
+        }
+
+        // Create User
+        const user = await User.create({
+            mobile,
+            role: role || "admin", // admin by default
+            isVerified: true,
+            profileCompleted: true,
+            status: "active"
+        });
+
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create Admin Profile
+        const profile = await AdminProfile.create({
+            userId: user._id,
+            fullName,
+            email: email.toLowerCase(),
+            password: hashedPassword,
+            permissions: []
+        });
+
+        // Generate JWT
+        const { generateToken } = require("../utils/jwt");
+        const token = generateToken(user);
+
+        return successResponse(
+            res,
+            "Admin registered successfully",
+            {
+                token,
+                role: user.role,
+                user: {
+                    _id: user._id,
+                    mobile: user.mobile,
+                    role: user.role,
+                    status: user.status
+                },
+                profile: {
+                    fullName: profile.fullName,
+                    email: profile.email,
+                    permissions: profile.permissions
+                }
+            },
+            201
+        );
+    } catch (error) {
+        return errorResponse(res, error.message, 500);
+    }
+};
+/* ─────────────────────────────────────────────────────────────
    ADMIN LOGIN (Email + Password)
 ───────────────────────────────────────────────────────────── */
 
